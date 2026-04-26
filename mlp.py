@@ -50,7 +50,7 @@ def init(inputSize,hidenLayersVector,ouputSize):
                continue
           weights.append(np.random.rand(hidenLayersVector[i-1],hidenLayersVector[i]) * np.sqrt(2/hidenLayersVector[i-1]))
           l = i
-     weights.append(np.random.rand(hidenLayersVector[l],ouputSize) * np.sqrt(2/hidenLayersVector[l-1]))     
+     weights.append(np.random.rand(hidenLayersVector[l],ouputSize) * np.sqrt(2/hidenLayersVector[l]))     
      return weights
 
 s = init(2,[5,4],1)
@@ -58,23 +58,32 @@ print(s)
 print(s[0])
 print(s[0].shape)
 def Relu(x):
-     if x < 0:
-          return 0
-     else :
-          return x
+     print(" RELU ",x)
+
+     for i in range(len(x)):
+          if x[i] < 0:
+               x[i] = 0
+          else :
+               x[i] = x[i]
+     return x          
            
 def forward(w,input):
      Z = []
-
-     z0 = w[0].T @ input.reshape(2,1)
-     print(z0)
+     
+     i = input.reshape(1,2)
+     z0 =  input.reshape(1,2) @ w[0]
+     print("z0 = ",z0)
+     print(" Z0 length ",len(z0))
+     print("z0 shape",z0.shape)
      z01 = z0
      for i in range(len(z0)):
           z01[i] = Relu(z0[i])
+     print("z01 ",z01)    
+     print("z01 i ",z01[0])    
      Z.append(z01)
      j = 1 
      while(1):
-          z = w[j].T @ Z[j-1]
+          z =  Z[j-1] @ w[j]
           z012 = z
           for i in range(len(z)):
                z012[i] = Relu(z[i])
@@ -83,7 +92,8 @@ def forward(w,input):
           if j == len(w)-1:
                print(" W DIMS ",w[j].shape)
                print(" Z DIMS ",Z[j-1].shape)
-               z = w[j].T @ Z[j-1]
+               #ddd
+               z =  Z[j-1] @ w[j]
                Z.append(z)
                print("result ",z)
                z012 = z
