@@ -168,14 +168,14 @@ def update_momentum(weights, biases, grad_w, grad_b, v_w, v_b, lr, beta):
 
 np.random.seed(0)
 
-weights, biases = init(2, [64,64], 1)
+weights, biases = init(2, [64,64,64,20], 1)
 
 # momentum buffers
 v_w = [np.zeros_like(w) for w in weights]
 v_b = [np.zeros_like(b) for b in biases]
 lr = 0.01
 beta = 0.9
-epochs = 5000
+epochs = 10000
 batch_size = 256
 start_time = time.time()
 loss_history = []
