@@ -173,7 +173,7 @@ weights, biases = init(2, [64,64,64,20], 1)
 # momentum buffers
 v_w = [np.zeros_like(w) for w in weights]
 v_b = [np.zeros_like(b) for b in biases]
-lr = 0.01
+lr = 0.08
 beta = 0.9
 epochs = 10000
 batch_size = 256
