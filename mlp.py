@@ -42,21 +42,29 @@ ax.set_zlabel('Z')
 ##############################################
 def init(inputSize,hidenLayersVector,ouputSize):
      weights = []
+     bias = []
      l = 0
      w0 = np.random.rand(inputSize,hidenLayersVector[0]) * np.sqrt(2/inputSize)
+     b0 = np.zeros((1,hidenLayersVector[0]))
+     bias.append( b0 )
      weights.append( w0 )
      for i in range(len(hidenLayersVector)):
           if i == 0:
                continue
           weights.append(np.random.rand(hidenLayersVector[i-1],hidenLayersVector[i]) * np.sqrt(2/hidenLayersVector[i-1]))
+          bias.append(np.zeros((1,hidenLayersVector[i])))
           l = i
-     weights.append(np.random.rand(hidenLayersVector[l],ouputSize) * np.sqrt(2/hidenLayersVector[l]))     
-     return weights
+     weights.append(np.random.rand(hidenLayersVector[l],ouputSize) * np.sqrt(2/hidenLayersVector[l]))    
+     bias.append(np.zeros((1,ouputSize))) 
+     return weights , bias
 
-s = init(2,[5,4],1)
+s , s2 = init(2,[5,4],1)
 print(s)
 print(s[0])
 print(s[0].shape)
+print(s2)
+print(s2[0])
+print(s2[0].shape)
 def Relu(x):
      print(" RELU ",x)
 
@@ -66,12 +74,13 @@ def Relu(x):
           else :
                x[i] = x[i]
      return x          
-           
+def loss(y,y_predicted):
+     return 1/2 * np.sum((y - y_predicted)**2)            
 def forward(w,input):
      Z = []
      
      i = input.reshape(1,2)
-     z0 =  input.reshape(1,2) @ w[0]
+     z0 =  input.reshape(1,2) @ w[0] + s2[0]
      print("z0 = ",z0)
      print(" Z0 length ",len(z0))
      print("z0 shape",z0.shape)
@@ -83,7 +92,7 @@ def forward(w,input):
      Z.append(z01)
      j = 1 
      while(1):
-          z =  Z[j-1] @ w[j]
+          z =  Z[j-1] @ w[j] + s2[j]
           z012 = z
           for i in range(len(z)):
                z012[i] = Relu(z[i])
@@ -93,12 +102,13 @@ def forward(w,input):
                print(" W DIMS ",w[j].shape)
                print(" Z DIMS ",Z[j-1].shape)
                #ddd
-               z =  Z[j-1] @ w[j]
+               z =  Z[j-1] @ w[j] + s2[j]
                Z.append(z)
                print("result ",z)
                z012 = z
                break
      return Z
-
+def backward():
+     return 0
 c = forward(s,data_n[0])
 print(c)
